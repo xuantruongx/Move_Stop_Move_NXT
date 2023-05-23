@@ -10,9 +10,7 @@ public class LevelManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-    }
-    private void Start()
-    {
         NavMeshTriangulation = NavMesh.CalculateTriangulation();
     }
+
 }

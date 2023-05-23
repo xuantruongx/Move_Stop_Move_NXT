@@ -8,6 +8,7 @@ public class EnemyStateManager : MonoBehaviour
     public EnemyPatrolState PatrolState = new EnemyPatrolState();
     public Character character;
     public NavMeshAgent agent;
+    public float RandomTime;
 
     private void Start()
     {

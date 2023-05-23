@@ -5,10 +5,12 @@ public class Character : MonoBehaviour, IKillable
 {
     private bool isDead;
     private Transform m_transform;
-    public float attackRadius;
+    public float AttackRadius;
     public Character Target;
-    public NavMeshAgent character;
+    public NavMeshAgent CharacterAgent;
     public bool JustFired;
+    public Animator CharacterAnimator;
+
 
 
     public Transform CharacterTransform
@@ -33,30 +35,48 @@ public class Character : MonoBehaviour, IKillable
         {
             GetCharacterAround();
         }
-        if ((character.velocity - Vector3.zero).sqrMagnitude <= 0.1f && Target != null && !Target.IsDead && !JustFired)
+        if ((CharacterAgent.velocity - Vector3.zero).sqrMagnitude <= 0.1f && Target != null && !Target.IsDead && !JustFired)
         {
             Attack(Target);
         }
-        if (Target != null && (Target.IsDead || Vector3.Distance(CharacterTransform.position, Target.CharacterTransform.position) > attackRadius))
+        if (Target != null && (Target.IsDead || Vector3.Distance(CharacterTransform.position, Target.CharacterTransform.position) > AttackRadius))
         {
             Target = null;
+            CharacterAnimator.SetBool("IsAttack", false);
         }
+
+        if (CharacterAnimator != null)
+        {
+            CharacterAnimator.SetBool("IsIdle", CharacterAgent.velocity.magnitude < 0.02f);
+        }
+
     }
 
     public virtual void Attack(Character target)
     {
+        CharacterAnimator.SetBool("IsAttack", true);
+    }
+    public virtual void SpawnProjectile()
+    {
+
 
     }
 
     public void Kill()
     {
+        CharacterAgent.isStopped = true;
         isDead = true;
+        CharacterAnimator.SetBool("IsDead", true);
+    }
+
+    public void Dead()
+    {
         gameObject.SetActive(false);
     }
 
     public virtual void GetCharacterAround()
     {
-        Collider[] colliders = Physics.OverlapSphere(CharacterTransform.position, attackRadius);
+        Collider[] colliders = Physics.OverlapSphere(CharacterTransform.position, AttackRadius);
         for (int i = 0; i < colliders.Length; i++)
         {
             Character temp = colliders[i].GetComponent<Character>();

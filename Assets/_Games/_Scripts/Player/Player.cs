@@ -9,14 +9,20 @@ public class Player : Character
 
     public override void Update()
     {
-        //  base.Update();
+        base.Update();
+        // Debug.Log(CharacterAgent.velocity.magnitude);
     }
     public override void Attack(Character target)
     {
-        JustFired = true;
         Owner.LookAt(target.CharacterTransform.position);
-        Instantiate(projectilePrefab, spawnProjectilePoint.position, spawnProjectilePoint.rotation);
+        base.Attack(target);
         CoolDown();
+    }
+    public override void SpawnProjectile()
+    {
+        base.SpawnProjectile();
+        Instantiate(projectilePrefab, spawnProjectilePoint.position, spawnProjectilePoint.rotation);
+        JustFired = true;
     }
     public override void GetCharacterAround()
     {
@@ -34,6 +40,7 @@ public class Player : Character
     IEnumerator WaitNewShoot()
     {
         yield return second;
+        CharacterAnimator.SetBool("IsAttack", false);
         JustFired = false;
     }
 

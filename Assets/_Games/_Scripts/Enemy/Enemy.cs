@@ -14,13 +14,17 @@ public class Enemy : Character
     {
         base.GetCharacterAround();
     }
-
     public override void Attack(Character target)
     {
-        JustFired = true;
         CharacterTransform.LookAt(target.CharacterTransform.position);
-        Instantiate(projectilePrefab, spawnProjectilePoint.position, spawnProjectilePoint.rotation);
+        base.Attack(target);
         CoolDown();
+    }
+    public override void SpawnProjectile()
+    {
+        base.SpawnProjectile();
+        Instantiate(projectilePrefab, spawnProjectilePoint.position, spawnProjectilePoint.rotation);
+        JustFired = true;
     }
     WaitForSeconds second = new WaitForSeconds(1f);
     Coroutine coroutine;
@@ -33,6 +37,7 @@ public class Enemy : Character
     IEnumerator WaitNewShoot()
     {
         yield return second;
+        CharacterAnimator.SetBool("IsAttack", false);
         JustFired = false;
     }
 }
