@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public abstract class State
 {
-    private List<Transition> _transitions = new();
+    private List<Transition> _transitions = new List<Transition>();
 
     public void AddTransition(Transition transition)
     {
